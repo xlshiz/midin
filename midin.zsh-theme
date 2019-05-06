@@ -46,7 +46,11 @@ function mid_prompt {
 		myprompt="$my_space$myprompt"
 	done
 
-	myprompt="%{$reset_color%} %{$terminfo[bold]$fg[yellow]%}$myprompt➜ %{$fg[cyan]%}%n%{$fg[white]%}@%{$fg[green]%}$(box_name) ${my_git_info}"
+	if [ $spare_len -lt -10 ]; then
+		myprompt=""
+	else
+		myprompt="%{$reset_color%} %{$terminfo[bold]$fg[yellow]%}$myprompt➜ %{$fg[cyan]%}%n%{$fg[white]%}@%{$fg[green]%}$(box_name) ${my_git_info}"
+	fi
 
 	echo $myprompt
 }
