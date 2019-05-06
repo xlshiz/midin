@@ -31,22 +31,18 @@ function mid_prompt {
 	my_space="-"
 	my_box="$(whoami)@$(box_name)"
 
-	(( spare_len = ${COLUMNS}  / 2 - 30 ))
+	(( spare_len = ${COLUMNS}  / 3 ))
 	box_name_len=${#${my_box}}
 	my_git_info_len=${#${my_git_info}}
-	if [ ${my_git_info_len} -ge 49 ]; then
-		(( my_git_info_len -= 49 ))
-	fi
-	# user_machine_len=${#${(%):-%n@%m-}}
 
-	(( spare_len = ${spare_len} - ${my_git_info_len} - ${box_name_len} ))
+	(( spare_len = ${spare_len} - ${my_git_info_len} - ${box_name_len} - 4 ))
 
 	myprompt=""
 	while [ ${#myprompt} -lt $spare_len ]; do
 		myprompt="$my_space$myprompt"
 	done
 
-	if [ $spare_len -lt -10 ]; then
+	if [ ${COLUMNS} -lt 60 ]; then
 		myprompt=""
 	else
 		myprompt="%{$reset_color%} %{$terminfo[bold]$fg[yellow]%}$myprompt➜ %{$fg[cyan]%}%n%{$fg[white]%}@%{$fg[green]%}$(box_name) ${my_git_info}"
