@@ -27,13 +27,21 @@ ZSH_THEME_SVN_PROMPT_SUFFIX="%{$grey%})%{$reset_color%}"
 
 # Prompt
 function mid_prompt {
+	if [ ${COLUMNS} -lt 60 ]; then
+		echo ""
+		return
+	fi
 	my_git_info=$(git_prompt_info)
 	my_space="-"
 	my_box="$(whoami)@$(box_name)"
 
 	(( spare_len = ${COLUMNS}  / 3 ))
 	box_name_len=${#${my_box}}
-	my_git_info_len=${#${my_git_info}}
+	if [ ${#${my_git_info}} -eq 0 ]; then
+		my_git_info_len=0
+	else
+		(( my_git_info_len = ${#${my_git_info}} - ${#${ZSH_THEME_GIT_PROMPT_PREFIX}} - ${#${ZSH_THEME_GIT_PROMPT_SUFFIX}} - ${#${ZSH_THEME_GIT_PROMPT_DIRTY}} + 10 ))
+	fi
 
 	(( spare_len = ${spare_len} - ${my_git_info_len} - ${box_name_len} - 4 ))
 
@@ -42,11 +50,7 @@ function mid_prompt {
 		myprompt="$my_space$myprompt"
 	done
 
-	if [ ${COLUMNS} -lt 60 ]; then
-		myprompt=""
-	else
-		myprompt="%{$reset_color%} %{$terminfo[bold]$fg[yellow]%}$myprompt➜ %{$fg[cyan]%}%n%{$fg[white]%}@%{$fg[green]%}$(box_name) ${my_git_info}"
-	fi
+	myprompt="%{$reset_color%} %{$terminfo[bold]$fg[yellow]%}$myprompt➜ %{$fg[cyan]%}%n%{$fg[white]%}@%{$fg[green]%}$(box_name) ${my_git_info}"
 
 	echo $myprompt
 }
