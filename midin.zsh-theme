@@ -57,13 +57,14 @@ function mid_prompt {
 
 setopt prompt_subst
 
-if [ ${EMACS} ]; then
+if [ ${TERM} = "dumb" ]; then
 chpwd() { print -P "\033AnSiTc %d" }
 print -P "\033AnSiTu %n"
 print -P "\033AnSiTc %d"
-fi
+else
 PROMPT='
 %{$terminfo[bold]$fg[blue]%}#%{$reset_color%} \
 %{$terminfo[bold]$fg[magenta]%}$(get_current_dir)
 $(mid_prompt)\
 %{$terminfo[bold]$fg[red]%}➤%{$reset_color%} '
+fi
